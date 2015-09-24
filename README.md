@@ -3,6 +3,7 @@ Cordova CameraPreview Plugin
 
 Cordova plugin that allows camera interaction from HTML code.<br/>
 Show camera preview popup on top of the HTML.<br/>
+<b>The main diff between this fork and the original repo is that now the resulting URLs are in Base64 format.</b>
 
 <p><b>Features:</b></p>
 <ul>
