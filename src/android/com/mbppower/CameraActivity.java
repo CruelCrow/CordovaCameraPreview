@@ -38,6 +38,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import android.util.Base64;
 
 public class CameraActivity extends Fragment {
 
@@ -394,10 +395,13 @@ public class CameraActivity extends Fragment {
 		    public void run() {
 
 			    try {
-				    final File picFile = storeImage(picture, "_preview");
+				    /*final File picFile = storeImage(picture, "_preview");
 				    final File originalPictureFile = storeImage(originalPicture, "_original");
 
-					eventListener.onPictureTaken(originalPictureFile.getAbsolutePath(), picFile.getAbsolutePath());
+					eventListener.onPictureTaken(originalPictureFile.getAbsolutePath(), picFile.getAbsolutePath());*/
+					String picFile = storeImage(picture, "_preview");
+					String originalPictureFile = storeImage(originalPicture, "_original");
+					eventListener.onPictureTaken(originalPictureFile, picFile);
 
 				    getActivity().runOnUiThread(new Runnable() {
 					    @Override
@@ -440,14 +444,20 @@ public class CameraActivity extends Fragment {
         return mediaFile;
     }
 
-    private File storeImage(Bitmap image, String suffix) {
+    private String storeImage(Bitmap image, String suffix) {
         File pictureFile = getOutputMediaFile(suffix);
         if (pictureFile != null) {
             try {
-                FileOutputStream fos = new FileOutputStream(pictureFile);
+                /*FileOutputStream fos = new FileOutputStream(pictureFile);
                 image.compress(Bitmap.CompressFormat.JPEG, 80, fos);
                 fos.close();
-                return pictureFile;
+                return pictureFile;*/
+				ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+				image.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+				byteArrayOutputStream.close();
+				byte[] byteArray = byteArrayOutputStream.toByteArray();
+				String encoded = "data:image/png;base64,"+Base64.encodeToString(byteArray, Base64.NO_WRAP);
+				return encoded;
             }
             catch (Exception ex) {
             }
